@@ -1,6 +1,6 @@
 const cache = new Map();
 
-const TTL = 60 * 1000; // 1 minute
+const TTL = 60 * 1000; 
 
 const cacheMiddleware = (req, res, next) => {
   const key = req.originalUrl;
