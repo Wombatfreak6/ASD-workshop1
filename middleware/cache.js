@@ -1,23 +1,23 @@
 const cache = new Map();
 
-const TTL = 60 * 1000; 
+const TTL = 60 * 1000;
+
+const markMiss = (res, next) => {
+  res.set("X-Cache", "MISS");
+  return next();
+};
 
 const cacheMiddleware = (req, res, next) => {
   const key = req.originalUrl;
-
   const cached = cache.get(key);
 
   if (!cached) {
-    res.set("X-Cache", "MISS");
-    return next();
+    return markMiss(res, next);
   }
 
-  const age = Date.now() - cached.createdAt;
-
-  if (age > TTL) {
+  if (Date.now() - cached.createdAt > TTL) {
     cache.delete(key);
-    res.set("X-Cache", "MISS");
-    return next();
+    return markMiss(res, next);
   }
 
   res.set("X-Cache", "HIT");
@@ -31,7 +31,7 @@ const setCache = (key, data) => {
   });
 };
 
-const clearCache = () => {
+const invalidateCache = () => {
   cache.clear();
 };
 
@@ -39,5 +39,5 @@ module.exports = {
   cache,
   cacheMiddleware,
   setCache,
-  clearCache
+  invalidateCache
 };

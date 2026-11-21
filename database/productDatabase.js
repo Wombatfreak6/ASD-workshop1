@@ -4,8 +4,16 @@ let products = [
   { id: 3, name: "Headphones", price: 2000 }
 ];
 
+const findIndexById = (id) => {
+  return products.findIndex((product) => product.id === Number(id));
+};
+
+const nextId = () => {
+  return products.reduce((max, product) => Math.max(max, product.id), 0) + 1;
+};
+
 const getProducts = () => {
-  return products;
+  return [...products];
 };
 
 const getProductById = (id) => {
@@ -14,8 +22,8 @@ const getProductById = (id) => {
 
 const addProduct = (product) => {
   const newProduct = {
-    id: products.length + 1,
-    ...product
+    ...product,
+    id: nextId()
   };
 
   products.push(newProduct);
@@ -23,9 +31,7 @@ const addProduct = (product) => {
 };
 
 const updateProduct = (id, data) => {
-  const index = products.findIndex(
-    (product) => product.id === Number(id)
-  );
+  const index = findIndexById(id);
 
   if (index === -1) return null;
 
@@ -38,9 +44,7 @@ const updateProduct = (id, data) => {
 };
 
 const deleteProduct = (id) => {
-  const index = products.findIndex(
-    (product) => product.id === Number(id)
-  );
+  const index = findIndexById(id);
 
   if (index === -1) return null;
 

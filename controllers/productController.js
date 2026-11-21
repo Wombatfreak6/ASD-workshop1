@@ -1,5 +1,5 @@
 const productService = require("../services/productService");
-const { setCache, clearCache } = require("../middleware/cache");
+const { setCache, invalidateCache } = require("../middleware/cache");
 
 const getProducts = (req, res) => {
   const products = productService.getProducts();
@@ -26,7 +26,7 @@ const getProductById = (req, res) => {
 const addProduct = (req, res) => {
   const product = productService.addProduct(req.body);
 
-  clearCache();
+  invalidateCache();
 
   res.status(201).json(product);
 };
@@ -43,7 +43,7 @@ const updateProduct = (req, res) => {
     });
   }
 
-  clearCache();
+  invalidateCache();
 
   res.json(product);
 };
@@ -57,7 +57,7 @@ const deleteProduct = (req, res) => {
     });
   }
 
-  clearCache();
+  invalidateCache();
 
   res.json(product);
 };
